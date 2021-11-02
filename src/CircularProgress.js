@@ -24,10 +24,12 @@ export default class CircularProgress extends React.PureComponent {
 
   render() {
     const {
+      goal,
       size,
       width,
       backgroundWidth,
       tintColor,
+      highlightColor,
       tintTransparency,
       backgroundColor,
       style,
@@ -49,6 +51,7 @@ export default class CircularProgress extends React.PureComponent {
     const radius = size / 2 - maxWidthCircle / 2 - padding / 2;
 
     const currentFillAngle = (arcSweepAngle * this.clampFill(fill)) / 100;
+    const goalFillAngle = (arcSweepAngle * this.clampFill(goal)) / 100;
     const backgroundPath = this.circlePath(
       sizeWithPadding,
       sizeWithPadding,
@@ -62,6 +65,13 @@ export default class CircularProgress extends React.PureComponent {
       radius,
       0,
       currentFillAngle
+    );
+    const goalPath = this.circlePath(
+      sizeWithPadding,
+      sizeWithPadding,
+      radius,
+      goalFillAngle,
+      goalFillAngle + 0.1
     );
     const coordinate = this.polarToCartesian(
       sizeWithPadding,
@@ -116,6 +126,16 @@ export default class CircularProgress extends React.PureComponent {
               <Path
                 d={circlePath}
                 stroke={tintColor}
+                strokeWidth={width}
+                strokeLinecap={fillLineCap}
+                strokeDasharray={strokeDasharrayTint}
+                fill="transparent"
+              />
+            )}
+            {goal > 0 && (
+              <Path
+                d={goalPath}
+                stroke={highlightColor}
                 strokeWidth={width}
                 strokeLinecap={fillLineCap}
                 strokeDasharray={strokeDasharrayTint}
